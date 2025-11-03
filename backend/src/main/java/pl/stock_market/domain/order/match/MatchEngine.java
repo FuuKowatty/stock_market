@@ -22,7 +22,7 @@ class MatchEngine {
                 BigDecimal tooMuch = accumulatedQuantity.subtract(desiredQuantity);
                 BigDecimal correctQuantity = o.quantity().subtract(tooMuch);
                 matched.add(new OrderToBuy(o, correctQuantity));
-                return new MatchResult(List.copyOf(matched));
+                return new MatchResult(matched);
             }
             matched.add(new OrderToBuy(o, o.quantity()));
         }

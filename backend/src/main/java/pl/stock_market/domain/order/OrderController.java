@@ -7,8 +7,9 @@ import pl.stock_market.infrastructure.application.dto.OrderDto;
 
 import java.util.List;
 
-// add api prefix globally
-@RestController("/orders")
+// @TODO add api prefix globally
+@RestController
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 class OrderController {
 
@@ -19,7 +20,7 @@ class OrderController {
         return orderService.getOrdersToBuy(stockId);
     }
 
-    @PostMapping("/type/buy/{quantity}")
+    @PostMapping("/type/buy")
     public void buyOrders(@RequestBody OrderRequest orderRequest) {
         orderService.buy(orderRequest);
     }

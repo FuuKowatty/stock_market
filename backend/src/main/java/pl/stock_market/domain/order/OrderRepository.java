@@ -9,5 +9,5 @@ import java.util.Set;
 @Repository
 interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByIdIn(Set<Long> longs);
-    List<Order> findByPortfolioStockIdAndTypeAndActiveTrue(Long stockId, Order.OrderType type);
+    List<Order> findByPortfolioStockIdAndAssetsActivatedTrue(Long stockId);
 }

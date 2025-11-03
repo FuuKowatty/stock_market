@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class HolderService {
+class HolderService {
 
     private final HolderRepository holderRepository;
 

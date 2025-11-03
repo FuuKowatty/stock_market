@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public interface HolderRepository extends JpaRepository<Holder, Long> {
+interface HolderRepository extends JpaRepository<Holder, Long> {
     @Query("SELECT h FROM Holder h WHERE h.portfolio IN :portfolios")
     List<Holder> findByPortfolioIn(Set<Portfolio> portfolios);
 }

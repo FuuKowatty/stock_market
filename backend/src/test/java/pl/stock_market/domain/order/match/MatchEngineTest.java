@@ -8,7 +8,6 @@ import pl.stock_market.infrastructure.application.dto.Portfolio;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MatchEngineTest {

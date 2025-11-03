@@ -1,35 +1,36 @@
-package pl.stock_market.domain.holder.quantity;
+package pl.stock_market.domain.holder;
 
 import jakarta.persistence.Embeddable;
 
 import java.math.BigDecimal;
 
 @Embeddable
-public class HolderQuantity {
+class HolderAssets {
 
+    public static final String QUANTITY_CANNOT_BE_LESS_THAN_0 = "quantity cannot be less than 0";
     private BigDecimal quantity;
-    private boolean active;
+    private boolean activated;
 
-    public HolderQuantity() {
+    public HolderAssets() {
         this.quantity = BigDecimal.ZERO;
-        this.active = false;
+        this.activated = false;
     }
 
-    public HolderQuantity(BigDecimal quantity, boolean active) {
+    public HolderAssets(BigDecimal quantity, boolean activated) {
         if (quantity.compareTo(BigDecimal.ZERO) < 0) {
-            throw new HolderQuantityException("quantity cannot be less than 0");
+            throw new HolderQuantityException(QUANTITY_CANNOT_BE_LESS_THAN_0);
         }
         this.quantity = quantity;
-        this.active = active;
+        this.activated = activated;
     }
 
     public void addQuantity(BigDecimal quantityToAdd) {
         BigDecimal newQuantity = this.quantity.add(quantity);
         if (newQuantity.compareTo(BigDecimal.ZERO) < 0) {
-            throw new HolderQuantityException("Negative quantity not allowed");
+            throw new HolderQuantityException(QUANTITY_CANNOT_BE_LESS_THAN_0);
         }
         if (newQuantity.compareTo(BigDecimal.ZERO) == 0) {
-            active = false;
+            activated = false;
         }
         quantity = newQuantity;
     }
