@@ -1,4 +1,4 @@
-package pl.stock_market.domain.wallet;
+package pl.stock_market.modules.wallet;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
