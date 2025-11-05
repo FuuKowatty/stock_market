@@ -37,4 +37,12 @@ class OrderAssets {
         }
         quantity = newQuantity;
     }
+
+    @Override
+    public String toString() {
+        return "OrderAssets{" +
+                "quantity=" + quantity +
+                ", activated=" + activated +
+                '}';
+    }
 }

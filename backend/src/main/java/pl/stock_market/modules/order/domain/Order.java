@@ -46,4 +46,15 @@ public class Order {
         SELL
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", price=" + price +
+                ", portfolio=" + portfolio +
+                ", type=" + type +
+                ", assets=" + assets +
+                '}';
+    }
+
 }

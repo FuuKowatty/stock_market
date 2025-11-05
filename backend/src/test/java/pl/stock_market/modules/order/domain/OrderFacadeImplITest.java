@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.stock_market.config.TestContainersConfiguration;
@@ -61,9 +62,12 @@ public class OrderFacadeImplITest {
         orderRepository.saveAll(List.of(sellOrder1, sellOrder2, sellOrder3));
     }
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     @AfterEach
-    void clear() {
-        orderRepository.deleteAll();
+    void cleanup() {
+        jdbcTemplate.execute("TRUNCATE TABLE orders RESTART IDENTITY CASCADE");
     }
 
     @Test
@@ -172,8 +176,5 @@ public class OrderFacadeImplITest {
                         }
                 );
     }
-
-
-    // errors during trade
 
 }
