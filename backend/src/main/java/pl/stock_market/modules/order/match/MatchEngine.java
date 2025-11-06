@@ -12,14 +12,20 @@ import java.util.List;
 
 @RequiredArgsConstructor
 class MatchEngine {
+    public static final OrderMatchResult NOT_MATCHED = new OrderMatchResult(false, Collections.emptyList());
     private final List<OrderDto> book;
 
     /** book should be sorted by price and then by add date (if after then closer) */
-    public OrderMatchResult match(BigDecimal desiredQuantity) {
+    public OrderMatchResult match(BigDecimal desiredQuantity, BigDecimal priceLimit) {
         List<OrderToBuy> matched = new ArrayList<>();
         BigDecimal accumulatedQuantity = BigDecimal.ZERO;
+        BigDecimal accumulatedPrice = BigDecimal.ZERO;
         for (OrderDto o : book) {
             accumulatedQuantity = accumulatedQuantity.add(o.quantity());
+            accumulatedPrice = accumulatedPrice.add(o.price());
+            if (accumulatedPrice.compareTo(priceLimit) > 0) {
+                return NOT_MATCHED;
+            }
             if (accumulatedQuantity.compareTo(desiredQuantity) >= 0) {
                 BigDecimal tooMuch = accumulatedQuantity.subtract(desiredQuantity);
                 BigDecimal correctQuantity = o.quantity().subtract(tooMuch);
@@ -28,7 +34,7 @@ class MatchEngine {
             }
             matched.add(new OrderToBuy(o, o.quantity()));
         }
-        return new OrderMatchResult(false, Collections.emptyList());
+        return NOT_MATCHED;
     }
 
 

@@ -28,7 +28,7 @@ public class OrderExecutionService {
     private final WalletFacade walletFacade;
 
     OrderMatchResult matchOrder(OrderRequest request, List<OrderDto> ordersToBuy) {
-        return matchService.matchOrder(request.requestedQuantity(), ordersToBuy);
+        return matchService.matchOrder(request.requestedQuantity(), request.requestedPrice(), ordersToBuy);
     }
 
     void tradeOrder(OrderRequest orderRequest, OrderMatchResult result) {

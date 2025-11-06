@@ -9,8 +9,8 @@ import java.util.List;
 
 @Service
 public class MatchServiceImpl implements MatchService {
-    public OrderMatchResult matchOrder(BigDecimal requestedQuantity, List<OrderDto> ordersToBuy) {
+    public OrderMatchResult matchOrder(BigDecimal requestedQuantity, BigDecimal requestedPrice, List<OrderDto> ordersToBuy) {
         // @TODO validate quantity
-        return new MatchEngine(ordersToBuy).match(requestedQuantity);
+        return new MatchEngine(ordersToBuy).match(requestedQuantity, requestedPrice);
     }
 }

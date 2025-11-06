@@ -7,5 +7,5 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface MatchService {
-    OrderMatchResult matchOrder(BigDecimal requestedQuantity, List<OrderDto> ordersToBuy);
+    OrderMatchResult matchOrder(BigDecimal requestedQuantity, BigDecimal bigDecimal, List<OrderDto> ordersToBuy);
 }
