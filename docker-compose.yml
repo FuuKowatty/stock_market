@@ -1,0 +1,34 @@
+version: "3"
+services:
+  db:
+    image: postgres:16.10
+    ports:
+      - "5432:5432"
+    networks:
+      - db_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres_db" ]
+    environment:
+      POSTGRES_DB: ${db_name}
+      POSTGRES_USER: ${db_name}
+      POSTGRES_PASSWORD: ${db_password}
+  stick_market_backend:
+    ports:
+      - 8000:8080
+    build: ./backend
+    restart: always
+    networks:
+      - backend_network
+      - db_network
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  postgres_data:
+networks:
+  backend_network:
+    driver: bridge
+  db_network:
+    driver: bridge
