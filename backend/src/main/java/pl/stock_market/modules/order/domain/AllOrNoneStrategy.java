@@ -10,19 +10,18 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-class QuantityOrderRequestStrategy implements OrderRequestTypeStrategy {
+class AllOrNoneStrategy implements OrderRequestTypeStrategy {
     private final OrderExecutionService executor;
 
     @Override
     public OrderRequestType getStrategy() {
-        return OrderRequestType.QUANTITY;
+        return OrderRequestType.ALL_OR_NONE;
     }
 
     @Override
     public void buyOrder(OrderRequest request, List<OrderDto> ordersToBuy) {
         OrderMatchResult result = executor.matchOrder(request, ordersToBuy);
         if (!result.matched()) {
-            executor.createOrder(request);
             return;
         }
         executor.tradeOrder(request, result);

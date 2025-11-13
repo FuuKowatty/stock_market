@@ -74,7 +74,7 @@ public class OrderFacadeImplITest {
     void should_buy_order() throws Exception {
         //given
         Portfolio purchaser = new Portfolio(1L, 1L, 1L);
-        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(100), BigDecimal.valueOf(250), OrderRequestType.QUANTITY);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(100), BigDecimal.valueOf(250), OrderRequestType.ALL_OR_NONE);
 
         // when
         mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")
@@ -108,7 +108,7 @@ public class OrderFacadeImplITest {
     void should_buy_order_and_still_stay_order_activated() throws Exception {
         //given
         Portfolio purchaser = new Portfolio(1L, 1L, 1L);
-        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(99), BigDecimal.valueOf(250), OrderRequestType.QUANTITY);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(99), BigDecimal.valueOf(250), OrderRequestType.ALL_OR_NONE);
 
         // when
         mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")
@@ -142,7 +142,7 @@ public class OrderFacadeImplITest {
     void should_not_match_order() throws Exception {
         //given
         Portfolio purchaser = new Portfolio(1L, 1L, 1L);
-        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(151L), BigDecimal.valueOf(250), OrderRequestType.QUANTITY);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(151L), BigDecimal.valueOf(250), OrderRequestType.ALL_OR_NONE);
 
         // when
         mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")

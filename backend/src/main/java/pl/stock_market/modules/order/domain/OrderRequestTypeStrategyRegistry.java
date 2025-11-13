@@ -21,7 +21,7 @@ class OrderRequestTypeStrategyRegistry {
     public OrderRequestTypeStrategy getStrategy(OrderRequestType type) {
         OrderRequestTypeStrategy strategy = strategyMap.get(type);
         if (strategy == null) {
-            throw new IllegalArgumentException("Nie znaleziono strategii dla typu: " + type);
+            throw new IllegalArgumentException("Not found startegy of type " + type);
         }
         return strategy;
     }
