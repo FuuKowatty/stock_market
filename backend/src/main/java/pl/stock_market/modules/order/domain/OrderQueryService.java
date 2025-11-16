@@ -1,12 +1,10 @@
-package pl.stock_market.modules.order.application;
+package pl.stock_market.modules.order.domain;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stock_market.modules.order.OrderMapper;
 import pl.stock_market.modules.order.api.dto.OrderDto;
-import pl.stock_market.modules.order.domain.Order;
-import pl.stock_market.modules.order.domain.OrderRepository;
 
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class OrderQueryService {
     private final OrderRepository repository;
 
     public List<OrderDto> getOrdersToBuy(Long stockId) {
-        List<Order> ordersToBuy = repository.findByPortfolioStockIdAndTypeAndAssetsActivatedTrue(stockId, SELL);
+        List<Order> ordersToBuy = repository.findOrders(stockId, SELL);
         return ordersToBuy.stream()
                 .map(OrderMapper::mapToDto)
                 .toList();

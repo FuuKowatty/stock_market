@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Embeddable
 @Getter
-class OrderAssets {
+public class OrderAssets {
     public static final String QUANTITY_CANNOT_BE_LESS_THAN_0 = "quantity cannot be less than 0";
     @Getter
     private BigDecimal quantity;

@@ -2,12 +2,10 @@ package pl.stock_market.modules.order.trade;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-//import pl.stock_market.domain.exchange.order.trading.TradeCalculator;
-//import pl.stock_market.infrastructure.application.dto.HolderDto;
-import pl.stock_market.modules.order.api.dto.OrderToBuy;
-import pl.stock_market.modules.order.api.dto.OrderDto;
 import pl.stock_market.infrastructure.application.dto.Portfolio;
 import pl.stock_market.infrastructure.application.dto.WalletOperation;
+import pl.stock_market.modules.order.api.dto.OrderDto;
+import pl.stock_market.modules.order.domain.OrderTradeDto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,8 +31,8 @@ class TradeCalculatorTest {
         // given
         OrderDto order1 = new OrderDto(1L, BigDecimal.valueOf(100), BigDecimal.valueOf(10), sellerPortfolio);
         OrderDto order2 = new OrderDto(2L, BigDecimal.valueOf(80), BigDecimal.valueOf(15), sellerPortfolio);
-        OrderToBuy orderToBuy1 = new OrderToBuy(order1, BigDecimal.valueOf(100));
-        OrderToBuy orderToBuy2 = new OrderToBuy(order2, BigDecimal.valueOf(20));
+        OrderTradeDto orderToBuy1 = new OrderTradeDto(order1, BigDecimal.valueOf(100));
+        OrderTradeDto orderToBuy2 = new OrderTradeDto(order2, BigDecimal.valueOf(20));
 
         // when
         calculator.processTrade(orderToBuy1);
@@ -65,7 +63,7 @@ class TradeCalculatorTest {
         // given
         OrderDto order1 = new OrderDto(1L, BigDecimal.valueOf(100), BigDecimal.valueOf(10), sellerPortfolio);
         OrderDto order2 = new OrderDto(2L, BigDecimal.valueOf(80), BigDecimal.valueOf(15), sellerPortfolio);
-        OrderToBuy orderToBuy1 = new OrderToBuy(order1, BigDecimal.valueOf(100));
+        OrderTradeDto orderToBuy1 = new OrderTradeDto(order1, BigDecimal.valueOf(100));
 
         // when
         calculator.processTrade(orderToBuy1);

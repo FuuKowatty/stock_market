@@ -45,20 +45,24 @@ public class OrderFacadeImplITest {
     @BeforeEach
     void seed() {
         Order sellOrder1 = OrderBuilder.anOrder()
-                .withQuantity(BigDecimal.valueOf(50))
-                .withPortfolio(2L, 1L, 1L)
+                .withQuantity(BigDecimal.valueOf(5))
+                .withPrice("99")
+                .withPortfolio(2L, 1L, 2L)
                 .withType(Order.OrderType.SELL)
                 .build();
         Order sellOrder2 = OrderBuilder.anOrder()
-                .withQuantity(BigDecimal.valueOf(50))
+                .withQuantity(BigDecimal.valueOf(4))
+                .withPrice("101")
                 .withPortfolio(2L, 1L, 1L)
                 .withType(Order.OrderType.SELL)
                 .build();
         Order sellOrder3 = OrderBuilder.anOrder()
-                .withQuantity(BigDecimal.valueOf(50))
-                .withPortfolio(2L, 1L, 2L)
+                .withQuantity(BigDecimal.valueOf(1))
+                .withPrice("102")
+                .withPortfolio(2L, 1L, 1L)
                 .withType(Order.OrderType.SELL)
                 .build();
+
         orderRepository.saveAll(List.of(sellOrder1, sellOrder2, sellOrder3));
     }
 
@@ -71,10 +75,10 @@ public class OrderFacadeImplITest {
     }
 
     @Test
-    void should_buy_order() throws Exception {
+    void should_full_buy_order() throws Exception {
         //given
         Portfolio purchaser = new Portfolio(1L, 1L, 1L);
-        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(100), BigDecimal.valueOf(250), OrderRequestType.ALL_OR_NONE);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(5), BigDecimal.valueOf(506), OrderRequestType.ALL_OR_NONE);
 
         // when
         mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")
@@ -84,12 +88,13 @@ public class OrderFacadeImplITest {
 
         //then
         List<Order> orders = orderRepository.findAll();
+        // @TODO tests depends on seed, fix that
         assertThat(orders).hasSize(3)
                 .satisfiesExactlyInAnyOrder(
                         order -> {
                             assertThat(order.getId()).isEqualTo(1L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
-                            assertThat(order.isActivated()).isFalse();
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(5));
+                            assertThat(order.isActivated()).isTrue();
                         },
                         order -> {
                             assertThat(order.getId()).isEqualTo(2L);
@@ -98,8 +103,8 @@ public class OrderFacadeImplITest {
                         },
                         order -> {
                             assertThat(order.getId()).isEqualTo(3L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(50));
-                            assertThat(order.isActivated()).isTrue();
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
+                            assertThat(order.isActivated()).isFalse();
                         }
                 );
     }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import pl.stock_market.infrastructure.application.dto.Portfolio;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -19,6 +21,7 @@ public class Order {
     OrderType type;
     @Embedded
     OrderAssets assets;
+    LocalDateTime created = LocalDateTime.now();
 
     public Order(BigDecimal price, Portfolio portfolio, OrderType type, OrderAssets assets) {
         this.price = price;

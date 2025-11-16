@@ -1,9 +1,9 @@
 package pl.stock_market.modules.order.trade;
 
-import pl.stock_market.modules.order.api.dto.OrderToBuy;
 import pl.stock_market.modules.order.api.dto.OrderDto;
 import pl.stock_market.infrastructure.application.dto.Portfolio;
 import pl.stock_market.infrastructure.application.dto.WalletOperation;
+import pl.stock_market.modules.order.domain.OrderTradeDto;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,9 +22,9 @@ class TradeCalculator {
         this.purchaser = portfolio;
     }
 
-    void processTrade(OrderToBuy orderToBuy) {
-        OrderDto order = orderToBuy.order();
-        BigDecimal neededQuantity = orderToBuy.neededQuantity();
+    void processTrade(OrderTradeDto orderToBuy) {
+        OrderDto order = orderToBuy.source();
+        BigDecimal neededQuantity = orderToBuy.quantity();
         updatePortfolio(order, neededQuantity);
         processPayment(order, neededQuantity);
     }
