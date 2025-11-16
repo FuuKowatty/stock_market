@@ -35,7 +35,7 @@ public class MatchEngine {
 
         public void accumulate(OrderDto o, BigDecimal quantityToTake) {
             this.currentQuantity = currentQuantity.add(quantityToTake);
-            this.currentPrice = currentPrice.add(quantityToTake.multiply(o.price()));
+            this.currentPrice = currentPrice.add(quantityToTake.multiply(o.getPrice()));
             this.matchedOrders.add(new OrderTradeDto(o, quantityToTake));
         }
     }

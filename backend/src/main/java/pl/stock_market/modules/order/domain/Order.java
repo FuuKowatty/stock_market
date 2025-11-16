@@ -2,10 +2,9 @@ package pl.stock_market.modules.order.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.Portfolio;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter

@@ -9,7 +9,8 @@ public class OrderMapper {
                 order.getId(),
                 order.getQuantity(),
                 order.getPrice(),
-                order.getPortfolio()
+                order.getPortfolio(),
+                order.getType()
         );
     }
 }

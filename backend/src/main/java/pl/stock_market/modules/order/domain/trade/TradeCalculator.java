@@ -1,8 +1,8 @@
-package pl.stock_market.modules.order.trade;
+package pl.stock_market.modules.order.domain.trade;
 
 import pl.stock_market.modules.order.api.dto.OrderDto;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
-import pl.stock_market.infrastructure.application.dto.WalletOperation;
+import pl.stock_market.modules.shared.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.WalletOperation;
 import pl.stock_market.modules.order.domain.OrderTradeDto;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class TradeCalculator {
+public class TradeCalculator {
     private final Map<String, BigDecimal> portfolioQuantityChange = new HashMap<>();
     private final List<WalletOperation> walletOperations = new ArrayList<>();
     private BigDecimal totalPurchaseAmount = BigDecimal.ZERO;
@@ -30,13 +30,13 @@ class TradeCalculator {
     }
 
     void updatePortfolio(OrderDto order, BigDecimal neededQuantity) {
-        portfolioQuantityChange.merge(order.portfolio().getId(), neededQuantity.negate(), BigDecimal::add);
+        portfolioQuantityChange.merge(order.getPortfolio().getId(), neededQuantity.negate(), BigDecimal::add);
         portfolioQuantityChange.merge(purchaser.getId(), neededQuantity, BigDecimal::add);
     }
 
     void processPayment(OrderDto order, BigDecimal neededQuantity) {
-        BigDecimal tradeValue = order.price().multiply(neededQuantity);
-        walletOperations.add(WalletOperation.deposit(order.portfolio().walletId(), tradeValue));
+        BigDecimal tradeValue = order.getPrice().multiply(neededQuantity);
+        walletOperations.add(WalletOperation.deposit(order.getPortfolio().walletId(), tradeValue));
         totalPurchaseAmount = totalPurchaseAmount.add(tradeValue);
     }
 

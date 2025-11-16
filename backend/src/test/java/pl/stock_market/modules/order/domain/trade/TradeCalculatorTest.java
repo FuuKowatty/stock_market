@@ -1,11 +1,12 @@
-package pl.stock_market.modules.order.trade;
+package pl.stock_market.modules.order.domain.trade;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
-import pl.stock_market.infrastructure.application.dto.WalletOperation;
 import pl.stock_market.modules.order.api.dto.OrderDto;
+import pl.stock_market.modules.order.domain.Order;
 import pl.stock_market.modules.order.domain.OrderTradeDto;
+import pl.stock_market.modules.shared.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.WalletOperation;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,8 +30,8 @@ class TradeCalculatorTest {
     @Test
     void shouldProcessMultipleTrades() {
         // given
-        OrderDto order1 = new OrderDto(1L, BigDecimal.valueOf(100), BigDecimal.valueOf(10), sellerPortfolio);
-        OrderDto order2 = new OrderDto(2L, BigDecimal.valueOf(80), BigDecimal.valueOf(15), sellerPortfolio);
+        OrderDto order1 = new OrderDto(1L, BigDecimal.valueOf(100), BigDecimal.valueOf(10), sellerPortfolio, Order.OrderType.SELL);
+        OrderDto order2 = new OrderDto(2L, BigDecimal.valueOf(80), BigDecimal.valueOf(15), sellerPortfolio, Order.OrderType.SELL);
         OrderTradeDto orderToBuy1 = new OrderTradeDto(order1, BigDecimal.valueOf(100));
         OrderTradeDto orderToBuy2 = new OrderTradeDto(order2, BigDecimal.valueOf(20));
 
@@ -61,8 +62,8 @@ class TradeCalculatorTest {
     @Test
     void shouldThrowExceptionIfMutateResult() {
         // given
-        OrderDto order1 = new OrderDto(1L, BigDecimal.valueOf(100), BigDecimal.valueOf(10), sellerPortfolio);
-        OrderDto order2 = new OrderDto(2L, BigDecimal.valueOf(80), BigDecimal.valueOf(15), sellerPortfolio);
+        OrderDto order1 = new OrderDto(1L, BigDecimal.valueOf(100), BigDecimal.valueOf(10), sellerPortfolio, Order.OrderType.SELL);
+        OrderDto order2 = new OrderDto(2L, BigDecimal.valueOf(80), BigDecimal.valueOf(15), sellerPortfolio, Order.OrderType.SELL);
         OrderTradeDto orderToBuy1 = new OrderTradeDto(order1, BigDecimal.valueOf(100));
 
         // when

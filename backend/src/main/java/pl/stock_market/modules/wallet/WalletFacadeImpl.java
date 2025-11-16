@@ -2,7 +2,7 @@ package pl.stock_market.modules.wallet;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.stock_market.infrastructure.application.dto.WalletOperation;
+import pl.stock_market.modules.shared.dto.WalletOperation;
 
 import java.util.List;
 

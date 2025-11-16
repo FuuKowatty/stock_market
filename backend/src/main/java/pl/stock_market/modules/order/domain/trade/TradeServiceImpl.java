@@ -1,8 +1,8 @@
-package pl.stock_market.modules.order.trade;
+package pl.stock_market.modules.order.domain.trade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.Portfolio;
 import pl.stock_market.modules.order.api.dto.TradeDto;
 import pl.stock_market.modules.order.domain.OrderTradeDto;
 

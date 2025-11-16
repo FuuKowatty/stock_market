@@ -1,6 +1,6 @@
 package pl.stock_market.modules.order.api.dto;
 
-import pl.stock_market.infrastructure.application.dto.WalletOperation;
+import pl.stock_market.modules.shared.dto.WalletOperation;
 
 import java.math.BigDecimal;
 import java.util.List;

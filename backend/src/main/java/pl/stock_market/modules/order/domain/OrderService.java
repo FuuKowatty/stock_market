@@ -8,7 +8,7 @@ import pl.stock_market.modules.order.api.dto.OrderDto;
 import pl.stock_market.modules.order.api.dto.OrderRequest;
 import pl.stock_market.modules.order.api.dto.TradeDto;
 import pl.stock_market.modules.order.domain.match.MatchResult;
-import pl.stock_market.modules.order.trade.TradeService;
+import pl.stock_market.modules.order.domain.trade.TradeService;
 import pl.stock_market.modules.wallet.WalletFacade;
 
 import java.util.List;
@@ -50,18 +50,18 @@ public class OrderService {
 
     private void updateActivateStatus(List<OrderTradeDto> orders) {
         Set<Long> orderIds = orders.stream()
-                .map(order -> order.source().id())
+                .map(order -> order.source().getId())
                 .collect(Collectors.toSet());
         Map<Long, Order> ordersById = orderRepository.findByIdIn(orderIds).stream()
                 .collect(Collectors.toMap(Order::getId, order -> order));
         for (OrderTradeDto order : orders) {
-            Order orderEntity = ordersById.get(order.source().id());
+            Order orderEntity = ordersById.get(order.source().getId());
             orderEntity.addQuantity(order.quantity().negate());
         }
     }
 
     private Long createOrder(OrderRequest request, OrderDto dto) {
-        Order order = new Order(dto.price(), request.portfolio(), Order.OrderType.BUY, new OrderAssets(dto.quantity(), true));
+        Order order = new Order(dto.getPrice(), request.portfolio(), Order.OrderType.BUY, new OrderAssets(dto.getQuantity(), true));
         return orderRepository.save(order).getId();
     }
 
