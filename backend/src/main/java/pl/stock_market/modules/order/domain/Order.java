@@ -2,9 +2,10 @@ package pl.stock_market.modules.order.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.Portfolio;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -19,6 +20,7 @@ public class Order {
     OrderType type;
     @Embedded
     OrderAssets assets;
+    LocalDateTime created = LocalDateTime.now();
 
     public Order(BigDecimal price, Portfolio portfolio, OrderType type, OrderAssets assets) {
         this.price = price;

@@ -1,7 +1,6 @@
 package pl.stock_market.modules.order.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import pl.stock_market.config.TestContainersConfiguration;
 import pl.stock_market.modules.holder.HolderFacade;
 import pl.stock_market.modules.order.api.dto.OrderRequest;
 import pl.stock_market.modules.wallet.WalletFacade;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.Portfolio;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,20 +44,24 @@ public class OrderFacadeImplITest {
     @BeforeEach
     void seed() {
         Order sellOrder1 = OrderBuilder.anOrder()
-                .withQuantity(BigDecimal.valueOf(50))
-                .withPortfolio(2L, 1L, 1L)
+                .withQuantity(BigDecimal.valueOf(5))
+                .withPrice("99")
+                .withPortfolio(2L, 1L, 2L)
                 .withType(Order.OrderType.SELL)
                 .build();
         Order sellOrder2 = OrderBuilder.anOrder()
-                .withQuantity(BigDecimal.valueOf(50))
+                .withQuantity(BigDecimal.valueOf(4))
+                .withPrice("101")
                 .withPortfolio(2L, 1L, 1L)
                 .withType(Order.OrderType.SELL)
                 .build();
         Order sellOrder3 = OrderBuilder.anOrder()
-                .withQuantity(BigDecimal.valueOf(50))
-                .withPortfolio(2L, 1L, 2L)
+                .withQuantity(BigDecimal.valueOf(1))
+                .withPrice("102")
+                .withPortfolio(2L, 1L, 1L)
                 .withType(Order.OrderType.SELL)
                 .build();
+
         orderRepository.saveAll(List.of(sellOrder1, sellOrder2, sellOrder3));
     }
 
@@ -74,7 +77,7 @@ public class OrderFacadeImplITest {
     void should_buy_order() throws Exception {
         //given
         Portfolio purchaser = new Portfolio(1L, 1L, 1L);
-        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(100), BigDecimal.valueOf(250), OrderRequestType.ALL_OR_NONE);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(5), BigDecimal.valueOf(102), OrderRequestType.ALL_OR_NONE);
 
         // when
         mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")
@@ -87,28 +90,28 @@ public class OrderFacadeImplITest {
         assertThat(orders).hasSize(3)
                 .satisfiesExactlyInAnyOrder(
                         order -> {
-                            assertThat(order.getId()).isEqualTo(1L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
-                            assertThat(order.isActivated()).isFalse();
-                        },
-                        order -> {
-                            assertThat(order.getId()).isEqualTo(2L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
-                            assertThat(order.isActivated()).isFalse();
-                        },
-                        order -> {
-                            assertThat(order.getId()).isEqualTo(3L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(50));
+                            assertThat(order.getPrice()).isEqualByComparingTo("99");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(5));
                             assertThat(order.isActivated()).isTrue();
+                        },
+                        order -> {
+                            assertThat(order.getPrice()).isEqualByComparingTo("101");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
+                            assertThat(order.isActivated()).isFalse();
+                        },
+                        order -> {
+                            assertThat(order.getPrice()).isEqualByComparingTo("102");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
+                            assertThat(order.isActivated()).isFalse();
                         }
                 );
     }
 
     @Test
-    void should_buy_order_and_still_stay_order_activated() throws Exception {
+    void should_partially_buy_order() throws Exception {
         //given
-        Portfolio purchaser = new Portfolio(1L, 1L, 1L);
-        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(99), BigDecimal.valueOf(250), OrderRequestType.ALL_OR_NONE);
+        Portfolio purchaser = new Portfolio(1L, 1L, 2L);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(4), BigDecimal.valueOf(99), OrderRequestType.ALL_OR_NONE);
 
         // when
         mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")
@@ -121,28 +124,28 @@ public class OrderFacadeImplITest {
         assertThat(orders).hasSize(3)
                 .satisfiesExactlyInAnyOrder(
                         order -> {
-                            assertThat(order.getId()).isEqualTo(1L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
-                            assertThat(order.isActivated()).isFalse();
-                        },
-                        order -> {
-                            assertThat(order.getId()).isEqualTo(2L);
+                            assertThat(order.getPrice()).isEqualByComparingTo("99");
                             assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(1));
                             assertThat(order.isActivated()).isTrue();
                         },
                         order -> {
-                            assertThat(order.getId()).isEqualTo(3L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(50));
+                            assertThat(order.getPrice()).isEqualByComparingTo("101");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(4));
+                            assertThat(order.isActivated()).isTrue();
+                        },
+                        order -> {
+                            assertThat(order.getPrice()).isEqualByComparingTo("102");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ONE);
                             assertThat(order.isActivated()).isTrue();
                         }
                 );
     }
 
     @Test
-    void should_not_match_order() throws Exception {
+    void should_not_match_order_because_not_enough_money() throws Exception {
         //given
         Portfolio purchaser = new Portfolio(1L, 1L, 1L);
-        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(151L), BigDecimal.valueOf(250), OrderRequestType.ALL_OR_NONE);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(5), BigDecimal.valueOf(101), OrderRequestType.ALL_OR_NONE);
 
         // when
         mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")
@@ -152,27 +155,56 @@ public class OrderFacadeImplITest {
 
         //then
         List<Order> orders = orderRepository.findAll();
-        assertThat(orders).hasSize(4)
+        assertThat(orders).hasSize(3)
                 .satisfiesExactlyInAnyOrder(
                         order -> {
-                            assertThat(order.getId()).isEqualTo(1L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(50));
+                            assertThat(order.getPrice()).isEqualByComparingTo("99");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(5));
                             assertThat(order.isActivated()).isTrue();
                         },
                         order -> {
-                            assertThat(order.getId()).isEqualTo(2L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(50));
+                            assertThat(order.getPrice()).isEqualByComparingTo("101");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(4));
                             assertThat(order.isActivated()).isTrue();
                         },
                         order -> {
-                            assertThat(order.getId()).isEqualTo(3L);
-                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(50));
+                            assertThat(order.getPrice()).isEqualByComparingTo("102");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ONE);
+                            assertThat(order.isActivated()).isTrue();
+                        }
+                );
+    }
+
+    @Test
+    void should_not_match_order_because_not_enough__quantity() throws Exception {
+        //given
+        Portfolio purchaser = new Portfolio(1L, 1L, 1L);
+        OrderRequest orderRequest = new OrderRequest(purchaser, BigDecimal.valueOf(6), BigDecimal.valueOf(102), OrderRequestType.ALL_OR_NONE);
+
+        // when
+        mockMvc.perform(post(ORDERS_ENDPOINTS + "/type/buy")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderRequest)))
+                .andExpect(status().isOk());
+
+        //then
+        List<Order> orders = orderRepository.findAll();
+        assertThat(orders).hasSize(3)
+                .satisfiesExactlyInAnyOrder(
+                        order -> {
+                            assertThat(order.getPrice()).isEqualByComparingTo("99");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(5));
                             assertThat(order.isActivated()).isTrue();
                         },
                         order -> {
-                            AssertionsForClassTypes.assertThat(order.getId()).isEqualTo(4L);
-                            AssertionsForClassTypes.assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(151));
-                            AssertionsForClassTypes.assertThat(order.isActivated()).isTrue();
+                            assertThat(order.getPrice()).isEqualByComparingTo("101");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(4));
+                            assertThat(order.isActivated()).isTrue();
+                        },
+                        order -> {
+                            assertThat(order.getPrice()).isEqualByComparingTo("102");
+                            assertThat(order.getQuantity()).isEqualByComparingTo(BigDecimal.ONE);
+                            assertThat(order.isActivated()).isTrue();
                         }
                 );
     }

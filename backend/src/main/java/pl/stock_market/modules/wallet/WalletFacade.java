@@ -1,6 +1,6 @@
 package pl.stock_market.modules.wallet;
 
-import pl.stock_market.infrastructure.application.dto.WalletOperation;
+import pl.stock_market.modules.shared.dto.WalletOperation;
 
 import java.util.List;
 

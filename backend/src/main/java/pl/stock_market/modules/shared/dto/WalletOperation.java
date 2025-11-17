@@ -1,4 +1,4 @@
-package pl.stock_market.infrastructure.application.dto;
+package pl.stock_market.modules.shared.dto;
 
 import java.math.BigDecimal;
 

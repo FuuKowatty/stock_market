@@ -2,7 +2,7 @@ package pl.stock_market.modules.holder;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.Portfolio;
 
 import java.math.BigDecimal;
 

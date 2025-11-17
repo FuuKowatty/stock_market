@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS orders (
     user_id BIGINT,
     wallet_id BIGINT,
     stock_id BIGINT,
-    activated BOOLEAN NOT NULL DEFAULT true
+    activated BOOLEAN NOT NULL DEFAULT true,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

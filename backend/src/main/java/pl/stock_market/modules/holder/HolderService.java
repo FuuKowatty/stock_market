@@ -3,7 +3,7 @@ package pl.stock_market.modules.holder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.stock_market.infrastructure.application.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.Portfolio;
 
 import java.math.BigDecimal;
 import java.util.List;

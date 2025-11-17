@@ -1,6 +1,6 @@
 package pl.stock_market.modules.order.domain;
 
-import pl.stock_market.infrastructure.application.dto.Portfolio;
+import pl.stock_market.modules.shared.dto.Portfolio;
 
 import java.math.BigDecimal;
 
