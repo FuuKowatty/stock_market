@@ -11,11 +11,11 @@ import java.util.Collections;
 class AllOrNothingPolicy implements MatchPolicy {
 
     private final BigDecimal requestedQuantity;
-    private final BigDecimal requestedPriceLimit;
+    private final BigDecimal requestedPice;
 
-    public AllOrNothingPolicy(BigDecimal requestedQuantity, BigDecimal requestedPriceLimit) {
+    public AllOrNothingPolicy(BigDecimal requestedQuantity, BigDecimal requestedPice) {
         this.requestedQuantity = requestedQuantity;
-        this.requestedPriceLimit = requestedPriceLimit;
+        this.requestedPice = requestedPice;
     }
 
     @Override
@@ -28,7 +28,7 @@ class AllOrNothingPolicy implements MatchPolicy {
     }
 
     private boolean exceedsBudget(OrderDto order) {
-        return order.getPrice().compareTo(requestedPriceLimit) > 0;
+        return order.getPrice().compareTo(requestedPice) > 0;
     }
 
     private boolean canFillRemaining(OrderDto order, BigDecimal needed) {

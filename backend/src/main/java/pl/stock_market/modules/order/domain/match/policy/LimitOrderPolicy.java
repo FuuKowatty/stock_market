@@ -18,12 +18,10 @@ class LimitOrderPolicy implements MatchPolicy {
     private final BigDecimal requestedQuantity;
     private final BigDecimal requestedPriceLimit;
     private final Portfolio purchaser;
-    private BigDecimal neededQuantity;
 
-
-    public LimitOrderPolicy(Portfolio purchaser, BigDecimal requestedPriceLimit, BigDecimal requestedQuantity) {
+    public LimitOrderPolicy(Portfolio purchaser, BigDecimal requestedPrice, BigDecimal requestedQuantity) {
         this.purchaser = purchaser;
-        this.requestedPriceLimit = requestedPriceLimit;
+        this.requestedPriceLimit = requestedPrice;
         this.requestedQuantity = requestedQuantity;
     }
 
@@ -32,7 +30,6 @@ class LimitOrderPolicy implements MatchPolicy {
         var needed = requestedQuantity.subtract(acc.getCurrentQuantity());
         if (canFillRemaining(order, needed)) {
             if (exceedsBudget(order)) {
-                neededQuantity = needed;
                 return skip();
             } else {
                 return takePartial(needed);
@@ -52,8 +49,9 @@ class LimitOrderPolicy implements MatchPolicy {
     @Override
     public MatchResult toResult(MatchEngine.MatchAccumulator acc) {
         if (acc.getCurrentQuantity().compareTo(requestedQuantity) < 0) {
+            BigDecimal neededQuantity = requestedQuantity.subtract(acc.getCurrentQuantity());
             return new MatchResult(List.of(
-                    new OrderDto(neededQuantity, requestedPriceLimit, purchaser, Order.OrderType.SELL)),
+                    new OrderDto(neededQuantity, requestedPriceLimit, purchaser, Order.OrderType.BUY)),
                     acc.getMatchedOrders());
         }
         return new MatchResult(Collections.emptyList(), acc.getMatchedOrders());
