@@ -9,10 +9,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${db_username} -d ${db_name}" ]
+      interval: 2s
+      retries: 3
     environment:
       POSTGRES_DB: ${db_name}
-      POSTGRES_USER: ${db_name}
+      POSTGRES_USER: ${db_username}
       POSTGRES_PASSWORD: ${db_password}
   stick_market_backend:
     ports:
@@ -29,6 +31,4 @@ volumes:
   postgres_data:
 networks:
   backend_network:
-    driver: bridge
   db_network:
-    driver: bridge
