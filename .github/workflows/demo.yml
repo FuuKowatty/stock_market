@@ -16,7 +16,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Building image
-        run: docker build .
+        run: docker build ./backend
 #
 #  push_images:
 #    name: Starting process of pushing images
