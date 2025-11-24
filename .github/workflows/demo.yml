@@ -1,6 +1,9 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Building app images
+run-name: ${{ github.actor }} is building app images
+on:
+  push:
+    branches:
+      - 'feature/**'
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
