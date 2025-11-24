@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
       - name: Building image
         run: docker build ./backend
-#
+
 #  push_images:
 #    name: Starting process of pushing images
 #    needs: build_backend
