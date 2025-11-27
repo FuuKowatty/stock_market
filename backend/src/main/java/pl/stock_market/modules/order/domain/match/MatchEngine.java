@@ -19,7 +19,9 @@ public class MatchEngine {
         MatchAccumulator acc = new MatchAccumulator();
         for (OrderDto order : book) {
             MatchDecision decision = policy.evaluate(order, acc);
-            acc.accumulate(order, decision.getQuantity());
+            if (decision != MatchDecision.skip()) {
+                acc.accumulate(order, decision.getQuantity());
+            }
             if (decision.isStopMatching()) {
                 break;
             }
