@@ -8,6 +8,8 @@ jobs:
   build_backend:
     name: Starting process of building backend
     runs-on: ubuntu-latest
+    env:
+      BUILD_SOURCE: remote_build_jar
     steps:
       - uses: actions/checkout@v2
       - name: Setting up java env
