@@ -15,8 +15,10 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+      - name: Building jar
+        run: mvn clean package
       - name: Building image
-        run: docker build ./backend
+        run: docker compose build backend
 
 #  push_images:
 #    name: Starting process of pushing images
