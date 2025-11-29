@@ -1,7 +1,7 @@
-ARG source
+ARG source=build_jar
 
 # ${source} option 1
-FROM maven:3.9-eclipse-temurin-21 as build_jar
+FROM maven:3.9-eclipse-temurin-21 AS build_jar
 WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline -DskipTests;
@@ -9,11 +9,11 @@ COPY src ./src
 RUN mvn clean package -DskipTests -B;
 
 # ${source} option 2
-FROM scratch as remote_build_jar
+FROM scratch AS remote_build_jar
 WORKDIR /app
 COPY ./target/stock_market.jar /app/target/stock_market.jar
 
-FROM ${source} as source_alias
+FROM ${source} AS source_alias
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app

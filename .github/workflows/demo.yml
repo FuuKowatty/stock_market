@@ -19,8 +19,16 @@ jobs:
           distribution: 'temurin'
       - name: Building jar
         run: mvn -f ./backend clean package
+      - name: Extract project version
+        id: get_version
+        run: | 
+          echo PROJECT_VERSION=$(mvn -q \
+          -Dexec.executable=echo \
+          -Dexec.args='${project.version}' \
+          --non-recursive \
+          exec:exec) >> $GITHUB_ENV
       - name: Building image
-        run: docker compose build backend
+        run: docker compose build -t stock-market-backend:${env.PROJECT_VERSION} backend
 
 #  push_images:
 #    name: Starting process of pushing images
