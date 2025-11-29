@@ -4,17 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import pl.stock_market.config.TestContainersConfiguration;
-import pl.stock_market.modules.holder.HolderFacade;
+import pl.stock_market.config.BaseIntegrationTest;
 import pl.stock_market.modules.order.api.dto.OrderRequest;
 import pl.stock_market.modules.shared.dto.Portfolio;
-import pl.stock_market.modules.wallet.WalletFacade;
 
 import java.math.BigDecimal;
 
@@ -28,11 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static pl.stock_market.modules.order.domain.OrderRequestType.ALL_OR_NONE;
 import static pl.stock_market.modules.order.domain.OrderRequestType.LIMIT_ORDER;
 
-@SpringBootTest
-@Import(TestContainersConfiguration.class)
 @AutoConfigureMockMvc
 @Transactional
-public class OrderFacadeImplITest {
+public class OrderServiceIT extends BaseIntegrationTest {
     private final static String ORDERS_ENDPOINTS = "/orders";
     @Autowired
     OrderRepository orderRepository;
@@ -40,10 +33,6 @@ public class OrderFacadeImplITest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @MockitoBean
-    WalletFacade walletFacadeMock;
-    @MockitoBean
-    HolderFacade holderFacadeMock;
 
     @Test
     void should_create_order() throws Exception {

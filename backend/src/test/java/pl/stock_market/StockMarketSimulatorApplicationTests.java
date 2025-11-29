@@ -1,10 +1,9 @@
 package pl.stock_market;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import pl.stock_market.config.BaseIntegrationTest;
 
-@SpringBootTest
-class StockMarketSimulatorApplicationTests {
+class StockMarketSimulatorApplicationTests extends BaseIntegrationTest {
 
 	@Test
 	void contextLoads() {
