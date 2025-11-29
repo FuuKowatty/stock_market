@@ -16,7 +16,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Building jar
-        run: mvn clean package
+        run: mvn -f ./backend clean package
       - name: Building image
         run: docker compose build backend
 
