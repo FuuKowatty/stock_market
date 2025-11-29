@@ -11,8 +11,8 @@ public class TestContainersConfiguration {
     @Bean
     @ServiceConnection
     @SuppressWarnings("resource")
-    static PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>("postgres:15-alpine")
+    public PostgreSQLContainer<?> postgreSQLContainer() {
+        return new PostgreSQLContainer<>("postgres:16.10")
                 .withInitScript("db/order/init.sql");
     }
 }
