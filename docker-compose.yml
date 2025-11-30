@@ -18,8 +18,11 @@ services:
       POSTGRES_PASSWORD: ${db_password}
   stick_market_backend:
     ports:
-      - 8000:8080
-    build: ./backend
+      - "8000:8080"
+    build:
+      context: ./backend
+      args:
+        source: ${BUILD_SOURCE}
     restart: always
     networks:
       - backend_network
