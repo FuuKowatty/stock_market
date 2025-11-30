@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is building app images
 on:
   push:
     branches:
-      - 'feature/**'
+      - 'main'
 
 permissions:
   contents: read
