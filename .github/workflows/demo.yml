@@ -31,7 +31,7 @@ jobs:
           cd ./backend
           echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
       - name: Building image
-        run: docker build -t ghcr.io/fuukowatty/stock-market-backend:${{ steps.get_version.outputs.VERSION }} --build-arg BUILD_SOURCE=${BUILD_SOURCE} ./backend
+        run: docker build -t ghcr.io/fuukowatty/stock-market-backend:${{ steps.get_version.outputs.VERSION }} --build-arg source=${BUILD_SOURCE} ./backend
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
