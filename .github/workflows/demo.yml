@@ -32,8 +32,6 @@ jobs:
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "DEBUG: Detected version: '$VERSION'"
           echo "DOCKER_TAG=ghcr.io/fuukowatty/stock-market-backend:$VERSION" >> $GITHUB_OUTPUT
-      - name: Building image
-        run: docker build -t ${{ steps.set_tag.outputs.DOCKER_TAG }} --build-arg source=${BUILD_SOURCE} ./backend
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -47,3 +45,4 @@ jobs:
           tags: ${{ steps.set_tag.outputs.DOCKER_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: source=${{ env.BUILD_SOURCE }}
