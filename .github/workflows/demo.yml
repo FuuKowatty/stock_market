@@ -24,7 +24,7 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: Building jar
-        run: mvn -f ./backend -B clean package
+        run: mvn -f ./backend -B clean verify
       - name: Extract project version
         id: set_tag
         run: |
