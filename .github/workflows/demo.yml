@@ -26,12 +26,14 @@ jobs:
       - name: Building jar
         run: mvn -f ./backend -B clean package
       - name: Extract project version
-        id: get_version
+        id: set_tag
         run: |
           cd ./backend
-          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "DEBUG: Detected version: '$VERSION'"
+          echo "DOCKER_TAG=ghcr.io/fuukowatty/stock-market-backend:$VERSION" >> $GITHUB_OUTPUT
       - name: Building image
-        run: docker build -t ghcr.io/fuukowatty/stock-market-backend:${{ steps.get_version.outputs.VERSION }} --build-arg source=${BUILD_SOURCE} ./backend
+        run: docker build -t ${{ steps.set_tag.outputs.DOCKER_TAG }} --build-arg source=${BUILD_SOURCE} ./backend
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -42,6 +44,6 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/fuukowatty/stock-market-backend:${{ steps.get_version.outputs.PROJECT_VERSION }}
+          tags: ${{ steps.set_tag.outputs.DOCKER_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
