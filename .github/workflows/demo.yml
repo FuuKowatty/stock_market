@@ -44,6 +44,6 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/fuukowatty/stock-market-backend:${{ steps.get_version.outputs.VERSION }}
+          tags: ghcr.io/fuukowatty/stock-market-backend:${{ steps.get_version.outputs.PROJECT_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
