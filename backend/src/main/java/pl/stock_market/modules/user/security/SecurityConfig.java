@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,7 +22,6 @@ import java.security.interfaces.RSAPublicKey;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 class SecurityConfig {
 
     @Value("${jwt.public.key}")
@@ -31,6 +29,9 @@ class SecurityConfig {
 
     @Value("${jwt.private.key}")
     private RSAPrivateKey privateKey;
+
+    @Value("${jwt.key.id}")
+    private String kid;
 
 
     @Bean
@@ -42,7 +43,6 @@ class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(config -> config.jwt((jwt -> jwt.decoder(jwtDecoder()))));
-
         return http.build();
     }
 
@@ -53,7 +53,7 @@ class SecurityConfig {
 
     @Bean
     JwtEncoder jwtEncoder() {
-        var jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
+        var jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).keyID(kid).build();
         var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
