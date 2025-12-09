@@ -22,4 +22,7 @@ COPY --from=source_alias /app/target/stock_market.jar .
 RUN adduser -D stockmarket_user
 USER stockmarket_user
 
-ENTRYPOINT ["java", "-jar", "stock_market.jar"]
+EXPOSE 8000
+
+ENTRYPOINT ["java", "", "-jar", "stock_market.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar stock_market.jar"]
