@@ -32,6 +32,7 @@ services:
       DB_NAME: ${db_name}
       DB_USER: ${db_username}
       DB_PASSWORD: ${db_password}
+      JWT_KID: ${JWT_KID}
     depends_on:
       db:
         condition: service_healthy
