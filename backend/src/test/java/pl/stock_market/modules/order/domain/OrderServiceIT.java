@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import pl.stock_market.config.BaseIntegrationTest;
@@ -23,6 +24,7 @@ import static pl.stock_market.modules.order.domain.OrderRequestType.ALL_OR_NONE;
 import static pl.stock_market.modules.order.domain.OrderRequestType.LIMIT_ORDER;
 
 @Transactional
+@WithMockUser(value = "spring")
 public class OrderServiceIT extends BaseIntegrationTest {
     private final static String ORDERS_ENDPOINTS = "/orders";
     @Autowired
