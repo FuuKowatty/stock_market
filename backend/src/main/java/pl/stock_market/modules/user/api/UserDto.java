@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
 public record UserDto(String login, String password, String firstName, String lastName, String email) {
-    private static final Pattern EMAIL_RX = Pattern.compile("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    private static final Pattern EMAIL_RX = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     static void validateCreate(UserDto dto) {
         if (dto == null || isBlank(dto.login) || isBlank(dto.firstName) || isBlank(dto.lastName))

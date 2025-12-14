@@ -3,7 +3,11 @@ package pl.stock_market.modules.user.security;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import org.apache.catalina.valves.RemoteIpValve;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +21,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -24,6 +30,7 @@ import java.security.interfaces.RSAPublicKey;
 @EnableWebSecurity
 class SecurityConfig {
 
+    public static final String NGINX_CONTENER_NAME = "web";
     @Value("${jwt.public.key}")
     private RSAPublicKey publicKey;
 
@@ -61,6 +68,23 @@ class SecurityConfig {
     @Bean
     JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "app.proxy-config.enabled", havingValue = "true")
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> proxyCustomizer() {
+        return factory -> {
+            try {
+                String ip = InetAddress.getByName(NGINX_CONTENER_NAME).getHostAddress();
+                RemoteIpValve valve = new RemoteIpValve();
+                valve.setInternalProxies(ip.replace(".", "\\."));
+                valve.setRemoteIpHeader("x-forwarded-for");
+                valve.setProtocolHeader("x-forwarded-proto");
+                factory.addEngineValves(valve);
+            } catch (UnknownHostException e) {
+                throw new RuntimeException("Host not found", e);
+            }
+        };
     }
 
 }

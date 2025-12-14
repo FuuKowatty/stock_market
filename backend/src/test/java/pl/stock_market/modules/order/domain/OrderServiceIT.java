@@ -24,7 +24,7 @@ import static pl.stock_market.modules.order.domain.OrderRequestType.ALL_OR_NONE;
 import static pl.stock_market.modules.order.domain.OrderRequestType.LIMIT_ORDER;
 
 @Transactional
-@WithMockUser(value = "spring")
+@WithMockUser
 public class OrderServiceIT extends BaseIntegrationTest {
     private final static String ORDERS_ENDPOINTS = "/orders";
     @Autowired
