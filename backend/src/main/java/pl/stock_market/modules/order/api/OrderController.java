@@ -9,7 +9,6 @@ import pl.stock_market.modules.order.domain.OrderService;
 
 import java.util.List;
 
-// @TODO add api prefix globally
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor

@@ -20,6 +20,8 @@ services:
       context: ./backend
       args:
         source: ${BUILD_SOURCE}
+    ports:
+      - "${BACKEND_PORT}:8080"
     networks:
       - backend_network
       - db_network
@@ -33,20 +35,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-  web:
-    image: nginx
-    volumes:
-      - ./proxy/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
-      - ./proxy/tls:/etc/nginx/
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - backend_network
-    environment:
-      - NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx
-    depends_on:
-      - backend
 volumes:
   postgres_data:
 networks:
