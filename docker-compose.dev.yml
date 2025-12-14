@@ -3,4 +3,4 @@ services:
     ports:
       - "8081:8081"
     environment:
-      JAVA_OPTS: ${JAVA_OPTS}
+      JAVA_OPTS: ${DEV_JAVA_OPTS}

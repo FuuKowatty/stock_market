@@ -16,13 +16,10 @@ services:
       POSTGRES_USER: ${db_username}
       POSTGRES_PASSWORD: ${db_password}
   backend:
-    ports:
-      - "8000:8080"
     build:
       context: ./backend
       args:
         source: ${BUILD_SOURCE}
-    restart: always
     networks:
       - backend_network
       - db_network
@@ -40,13 +37,13 @@ services:
     image: nginx
     volumes:
       - ./proxy/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - ./proxy/tls:/etc/nginx/
     ports:
-      - "80:${NGINX_PORT}"
+      - "80:80"
+      - "443:443"
     networks:
       - backend_network
     environment:
-      - NGINX_HOST=stock-market
-      - NGINX_PORT=${NGINX_PORT}
       - NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx
     depends_on:
       - backend
