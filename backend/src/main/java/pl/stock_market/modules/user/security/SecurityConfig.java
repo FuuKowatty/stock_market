@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import org.apache.catalina.valves.RemoteIpValve;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -70,6 +71,7 @@ class SecurityConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "app.proxy-config.enabled", havingValue = "true")
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> proxyCustomizer() {
         return factory -> {
             try {
