@@ -36,6 +36,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  web:
+    image: nginx
+    volumes:
+      - ./proxy/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+    ports:
+      - "80:${NGINX_PORT}"
+    networks:
+      - backend_network
+    environment:
+      - NGINX_HOST=stock-market
+      - NGINX_PORT=${NGINX_PORT}
+      - NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx
+    depends_on:
+      - backend
 volumes:
   postgres_data:
 networks:
