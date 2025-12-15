@@ -15,3 +15,16 @@ You can generate a self-signed certificate for `localhost` and place the files i
 ```bash
 cd ./proxy # make sure you are in valid directory
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/CN=localhost"
+```
+
+## 3. 📂 Directory Structure
+Nginx requires specific folders to write logs and temporary files. Ensure these exist inside `proxy/`:
+* `logs/`
+* `temp/`
+
+## 4. 🚀 Running Nginx
+Running nginx should be easy as always. You just need to specify with -p flag te actual nginx.conf file
+
+```cmd
+nginx -p ".../proxy"
+```
