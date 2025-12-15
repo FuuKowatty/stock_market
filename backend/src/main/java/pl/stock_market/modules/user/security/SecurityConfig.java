@@ -21,8 +21,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -30,7 +28,7 @@ import java.security.interfaces.RSAPublicKey;
 @EnableWebSecurity
 class SecurityConfig {
 
-    public static final String NGINX_CONTENER_NAME = "web";
+    public static final String NGINX_CONTAINER_NAME = "web";
     @Value("${jwt.public.key}")
     private RSAPublicKey publicKey;
 
@@ -71,19 +69,14 @@ class SecurityConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "app.proxy-config.enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "app.proxy-config.enabled", havingValue = "true", matchIfMissing = true)
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> proxyCustomizer() {
         return factory -> {
-            try {
-                String ip = InetAddress.getByName(NGINX_CONTENER_NAME).getHostAddress();
-                RemoteIpValve valve = new RemoteIpValve();
-                valve.setInternalProxies(ip.replace(".", "\\."));
-                valve.setRemoteIpHeader("x-forwarded-for");
-                valve.setProtocolHeader("x-forwarded-proto");
-                factory.addEngineValves(valve);
-            } catch (UnknownHostException e) {
-                throw new RuntimeException("Host not found", e);
-            }
+            RemoteIpValve valve = new RemoteIpValve();
+            valve.setInternalProxies(".*");
+            valve.setRemoteIpHeader("x-forwarded-for");
+            valve.setProtocolHeader("x-forwarded-proto");
+            factory.addEngineValves(valve);
         };
     }
 
